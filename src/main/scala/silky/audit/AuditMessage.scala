@@ -1,9 +1,9 @@
 package silky.audit
 
-import scala.collection.{Map, mutable}
 import java.util.Date
-import silky.headers.Headers._
 import java.util.UUID._
+import scala.collection.{Map, mutable}
+import silky.headers.Headers._
 
 case class AuditMessage(timestamp: Date = new Date,
                         private val _headers: mutable.Map[String, String] = new mutable.LinkedHashMap[String, String],
@@ -23,6 +23,5 @@ case class AuditMessage(timestamp: Date = new Date,
     orderedHeaders += ((FROM, from))
     orderedHeaders += ((TO, to))
     orderedHeaders ++= _headers
-    orderedHeaders
   }
 }

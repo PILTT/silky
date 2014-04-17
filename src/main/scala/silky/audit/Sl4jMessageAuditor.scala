@@ -1,7 +1,7 @@
 package silky.audit
 
-import silky.MessageFlowId
 import org.slf4j.LoggerFactory.getLogger
+import silky.MessageFlowId
 
 class Sl4jMessageAuditor(defaultLoggerName: String, messageFormatter: MessageFormatter) extends MessageAuditor {
 
