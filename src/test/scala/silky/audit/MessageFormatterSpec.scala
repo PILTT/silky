@@ -1,8 +1,9 @@
-package silky
+package silky.audit
 
-import org.scalatest._
-import silky.audit.{AuditMessage, MessageFormatter}
 import java.util.Date
+import org.scalatest._
+import silky.MessageFlowId
+import silky.audit.MessageFormatter.withoutMargin
 
 class MessageFormatterSpec extends Spec with MustMatchers {
   private val messageFlowId = MessageFlowId("456")
@@ -44,6 +45,4 @@ class MessageFormatterSpec extends Spec with MustMatchers {
       |""")
     }
   }
-
-  private def withoutMargin(text: String) = text.stripMargin.replaceFirst("\n", "")
 }
