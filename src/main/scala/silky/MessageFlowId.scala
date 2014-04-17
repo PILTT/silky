@@ -7,7 +7,7 @@ object MessageFlowId {
   private val messageFlowIds = new DynamicVariable[Option[MessageFlowId]](init = None)
 
   def set(messageFlowId: Option[MessageFlowId]): Option[MessageFlowId] = {
-    messageFlowIds.value_=(newval = messageFlowId)
+    messageFlowIds value_= messageFlowId
     messageFlowId
   }
 
