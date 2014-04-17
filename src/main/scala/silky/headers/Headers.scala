@@ -11,7 +11,7 @@ object Headers {
   def scopedSet(messageFlowIdValue: String, unitOfWork: () => Unit) {
     try {
       MessageFlowId.set(Some(MessageFlowId(messageFlowIdValue)))
-      unitOfWork
+      unitOfWork()
     } finally {
       MessageFlowId.clear()
     }
