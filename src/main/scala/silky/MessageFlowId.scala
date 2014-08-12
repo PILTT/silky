@@ -15,9 +15,7 @@ object MessageFlowId {
 
   def makeOneUp: Option[MessageFlowId] = set(Some(MessageFlowId(randomUUID.toString)))
 
-  def clear() {
-    set(messageFlowId = None)
-  }
+  def clear(): Unit = set(messageFlowId = None)
 }
 
 case class MessageFlowId(value: String) {
