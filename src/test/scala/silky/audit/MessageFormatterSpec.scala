@@ -14,7 +14,7 @@ class MessageFormatterSpec extends Spec with MustMatchers {
       val message = AuditMessage(from = "Foo", to = "Bar", timestamp = new Date(0L), id = "4babe38095", payload =
           <foo><bar>1</bar></foo>)
 
-      underTest.format(messageFlowId, message) mustBe withoutMargin(s"""
+      underTest.format(messageFlowId, message) mustBe withoutMargin("""
       |1970-01-01 00:00:00,000 Begin: 456
       |Message-Id: 4babe38095
       |From: Foo
@@ -31,7 +31,7 @@ class MessageFormatterSpec extends Spec with MustMatchers {
         .withHeader("Conversation", "d16dfac6-0896-4e38-aae2-13147fdee4be")
         .withHeader("Duration", "33 milliseconds")
 
-      underTest.format(messageFlowId, message) mustBe withoutMargin(s"""
+      underTest.format(messageFlowId, message) mustBe withoutMargin("""
       |1970-01-01 00:00:00,000 Begin: 456
       |Message-Id: 4babe38095
       |From: Foo
