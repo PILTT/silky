@@ -4,9 +4,9 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import scala.collection.Map
 import silky.MessageFlowId
-import silky.audit.MessageFormatter.withoutMargin
+import silky.audit.Formatter.withoutMargin
 
-class MessageFormatter(val dateFormat: DateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS")) {
+class Formatter(val dateFormat: DateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS")) {
 
   def format(messageFlowId: MessageFlowId, auditMessage: AuditMessage): String = withoutMargin(s"""
     |${dateFormat.format(auditMessage.timestamp)} Begin: $messageFlowId
@@ -22,6 +22,6 @@ class MessageFormatter(val dateFormat: DateFormat = new SimpleDateFormat("yyyy-M
     .mkString("\n")
 }
 
-object MessageFormatter {
+object Formatter {
   private[audit] def withoutMargin(text: String) = text.stripMargin.replaceFirst("\n", "")
 }

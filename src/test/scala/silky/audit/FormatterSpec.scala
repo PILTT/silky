@@ -3,11 +3,11 @@ package silky.audit
 import java.util.{Date, TimeZone}
 import org.scalatest._
 import silky.MessageFlowId
-import silky.audit.MessageFormatter.withoutMargin
+import silky.audit.Formatter.withoutMargin
 
-class MessageFormatterSpec extends Spec with MustMatchers {
+class FormatterSpec extends Spec with MustMatchers {
   private val messageFlowId = MessageFlowId("456")
-  private val underTest = new MessageFormatter
+  private val underTest = new Formatter
   underTest.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
 
   object `MessageFormatter must` {
