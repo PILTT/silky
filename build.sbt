@@ -20,7 +20,7 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.0" % "test",
   "com.lmax" % "disruptor" % "3.2.1" % "test",
   "org.scalatest" %% "scalatest" % "2.2.1" % "test",
-  "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.56" % "test"
+  "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.66" % "test"
 )
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:implicitConversions")

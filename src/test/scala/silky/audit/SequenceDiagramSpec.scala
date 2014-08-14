@@ -2,7 +2,7 @@ package silky.audit
 
 import java.util.{Date, TimeZone}
 
-import clairvoyance.{CapturedValue, ProducesCapturedInputsAndOutputs}
+import clairvoyance.ProducesCapturedInputsAndOutputs
 import clairvoyance.plugins.SequenceDiagram
 import clairvoyance.scalatest.ClairvoyantContext
 import org.scalatest.{MustMatchers, Spec}
@@ -64,7 +64,6 @@ class SequenceDiagramSpec extends Spec with MustMatchers with ClairvoyantContext
         AuditMessage(from = "Foo", to = "Bar", timestamp = new Date(3000L), id = "4babe38095", payload = "<foo>value: 1234</foo>"),
         AuditMessage(from = "Bar", to = "Foo", timestamp = new Date(5000L), id = "4babe38097", payload = "<bar>value: 5678, was: 1234</bar>")
       )
-
     }
   }
 
