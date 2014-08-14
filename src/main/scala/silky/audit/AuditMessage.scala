@@ -12,7 +12,7 @@ object Headers {
   val TO = "To"
 }
 
-case class AuditMessage(id: String = randomUUID.toString, from: String, to: String, payload: Any, timestamp: Date = new Date) {
+case class AuditMessage(id: String = randomUUID.toString, from: String, to: String, payload: AnyRef, timestamp: Date = new Date) {
   private val _headers: mutable.Map[String, String] = new mutable.LinkedHashMap[String, String]
 
   def withHeader(name: String, value: String): AuditMessage = {
