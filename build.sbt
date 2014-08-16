@@ -1,4 +1,4 @@
-organization := "silky"
+organization := "org.piltt"
 
 name := "silky"
 
