@@ -12,7 +12,7 @@ crossScalaVersions := Seq("2.10.4", "2.11.2")
 
 javacOptions ++= Seq("-Xms512m", "-Xmx512m", "-Xss4m")
 
-scalacOptions ++= Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
 
 resolvers ++= Seq(
   "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/",
@@ -23,6 +23,7 @@ resolvers ++= Seq(
 graphSettings
 
 libraryDependencies <<= scalaVersion { scala_version ⇒ Seq(
+    "org.scala-lang" % "scala-library" % scala_version,
     "org.slf4j" % "slf4j-api" % "1.7.7",
     "org.slf4j" % "slf4j-ext" % "1.7.7",
     "org.apache.logging.log4j" % "log4j-api" % "2.0.1" % "test",
