@@ -1,0 +1,15 @@
+language: scala
+scala:
+- 2.10.4
+jdk:
+- openjdk6
+
+before_script: ./scripts/prepublish.sh
+script: ./scripts/ci-build.sh
+
+env:
+  global:
+  - BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
+  - secure: S3kNt4FDxqFZpxhagR20wnx+vnSOzIPQOwGnY3tJF+JxH1eKxQhgEsO13dGOtAkRR5wPq/HckAuSax6Q1d5TW88Y4CdMre6tcfMTv717nmISe+G/c8/2BZWOEnpiGtdw+wU1u649GOFmbBpyA5WXIGLTXOxUkCTbNjycYwI3ZUk=
+  - secure: txEHpuBiKf5hFBS1OsbFjx9+VqqVlEYINOLasaD3Xb2Y3kr1eomqnGemYUcN06R6RTn+a8Ma74zc+WGdIJourZnQXJ325oAs9F4gDdtYm00ce9WK9iK/aeRIwZegNpVXAyTHqyzh1/Wfa+vhGmbYiNGC4G4CH7Azb1oFwsdcOf0=
+  - secure: lKGguSx4FyewZs88s0Kv26G2YwgRMBuZu1RyxFbYVzzkVcl7fzpTzFq4FDo9thic5cUM7lrOgn1S8FGC2Ur3hFdBMiB8P3ZhayncvG02OtbLVLI0lulPcr7spxcre2dzsOqQtXVF+TET4BEEqvmWOPAPpqATEOPjOPWdkgWQS7o=
