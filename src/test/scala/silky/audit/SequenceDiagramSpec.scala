@@ -5,6 +5,7 @@ import java.util.{Date, TimeZone}
 import clairvoyance.ProducesCapturedInputsAndOutputs
 import clairvoyance.plugins.SequenceDiagram
 import clairvoyance.scalatest.ClairvoyantContext
+import clairvoyance.scalatest.tags.skipInteractions
 import org.scalatest.{MustMatchers, Spec}
 import silky.audit.Formatter._
 
@@ -15,24 +16,11 @@ class SequenceDiagramSpec extends Spec with MustMatchers with ClairvoyantContext
 
   override def capturedInputsAndOutputs: Seq[ProducesCapturedInputsAndOutputs] = Seq(this)
 
-  private def parse(source: Source): Stream[AuditMessage] = {
-    val parser = new Parser
-    parser.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-
-    val stream = parser.parse(source)
-    stream.foreach { message => captureValue(s"${classify(message.payload)} from ${message.from} to ${message.to}" -> message.payload) }
-    stream
-  }
-
-  private def classify(payload: AnyRef): String = payload match {
-    case "" => "Unknown"
-    case s: String => ConstructingParser.fromSource(Source.fromString(s), preserveWS = false).document().docElem.label.capitalize
-  }
-
-  object `Silky is` {
+  object `Audit messages` {
     interestingGivens += ("initial value" -> "1234")
 
-    def `can render a sequence diagram` {
+    @skipInteractions
+    def `can be rendered as a sequence diagram` {
       parse(fromString(
         """
           |1970-01-01 00:00:01,000 Begin: 123
@@ -67,5 +55,19 @@ class SequenceDiagramSpec extends Spec with MustMatchers with ClairvoyantContext
     }
   }
 
+  private def parse(source: Source): Stream[AuditMessage] = {
+    val parser = new Parser
+    parser.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+    val stream = parser.parse(source)
+    stream.foreach { message => captureValue(s"${classify(message.payload)} from ${message.from} to ${message.to}" -> message.payload) }
+    stream
+  }
+
   private def fromString(string: String): Source = Source.fromString(withoutMargin(string).trim)
+
+  private def classify(payload: AnyRef): String = payload match {
+    case "" => "Unknown"
+    case s: String => ConstructingParser.fromSource(Source.fromString(s), preserveWS = false).document().docElem.label.capitalize
+  }
 }
