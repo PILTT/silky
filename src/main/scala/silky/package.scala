@@ -12,6 +12,8 @@ package object silky {
       case v: Stream[_]      ⇒ treeStringOf(v)
       case v: Traversable[_] ⇒ treeStringOf(v)
       case Some(v)           ⇒ s"Some(${v.asTreeString})"
+      case Left(v)           ⇒ s"Left(${v.asTreeString})"
+      case Right(v)          ⇒ s"Right(${v.asTreeString})"
       case v: Product        ⇒ treeStringOf(v)
       case v: String         ⇒ s""""$v""""
       case null              ⇒ "null"
@@ -35,7 +37,7 @@ package object silky {
 
     private def treeStringOf(p: Product): String = {
       val fields = currentMirror.reflect(p).symbol.typeSignature.members.toStream
-        .collect { case a: TermSymbol ⇒ a}
+        .collect { case a: TermSymbol ⇒ a }
         .filterNot(_.isMethod)
         .filterNot(_.isModule)
         .filterNot(_.isClass)
