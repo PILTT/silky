@@ -11,23 +11,27 @@ package object silky {
       case (k, v)            ⇒ s"$k = ${v.asTreeString}"
       case v: Stream[_]      ⇒ treeStringOf(v)
       case v: Traversable[_] ⇒ treeStringOf(v)
+      case Some(v)           ⇒ s"Some(${v.asTreeString})"
       case v: Product        ⇒ treeStringOf(v)
       case v: String         ⇒ s""""$v""""
       case null              ⇒ "null"
       case _                 ⇒ a.toString
     }
 
-    private def treeStringOf(s: Stream[_]): String =
-      s.map(_.asTreeString)
-        .map(indent)
-        .mkString(lineSeparator)
+    private def treeStringOf(s: Stream[_]): String = {
+      val result = s.map(_.asTreeString)
+      if (result.size < 3) result.mkString(", ") else result.map(indent).mkString(lineSeparator)
+    }
 
     private def treeStringOf(t: Traversable[_]): String =
-      s"""${t.stringPrefix}($lineSeparator${
-        t.map(_.asTreeString)
-          .map(indent)
-          .mkString(lineSeparator)
-      }$lineSeparator)"""
+      if (t.size < 3)
+        s"${t.stringPrefix}(${t.map(_.asTreeString).mkString(", ")})"
+      else
+        s"""${t.stringPrefix}($lineSeparator${
+          t.map(_.asTreeString)
+            .map(indent)
+            .mkString(lineSeparator)
+        }$lineSeparator)"""
 
     private def treeStringOf(p: Product): String = {
       val fields = currentMirror.reflect(p).symbol.typeSignature.members.toStream
@@ -41,7 +45,7 @@ package object silky {
 
       p.productArity match {
         case 0 ⇒ p.productPrefix
-        case 1 ⇒ s"${p.productPrefix}(${fields.head._1} = ${fields.head._2.asTreeString})"
+        case n if n < 3 ⇒ s"${p.productPrefix}(${fields.asTreeString})"
         case _ ⇒ s"${p.productPrefix}($lineSeparator${fields.asTreeString}$lineSeparator)"
       }
     }

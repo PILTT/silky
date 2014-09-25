@@ -9,7 +9,7 @@ class TreeStringSpec extends Spec with MustMatchers {
   case class Node2(suffix: String, position: Int)
   case class Node3(suffix: String, position: Int, names: List[String])
   case class Node4(suffix: String, position: Int, contact: Node3)
-  case class Node5(suffix: String, top: Node1, left: Node3, right: Node4, bottom: Node0.type)
+  case class Node5(suffix: Option[String], top: Node1, left: Node3, right: Node4, bottom: Node0.type)
 
   object `AnyTreeString can` {
 
@@ -20,11 +20,7 @@ class TreeStringSpec extends Spec with MustMatchers {
       Node1("Bar").asTreeString mustBe "Node1(suffix = \"Bar\")"
 
     def `render a case class with 2-arity`: Unit =
-      Node2("Bar", 3).asTreeString mustBe
-        """Node2(
-          !- suffix = "Bar"
-          !- position = 3
-          !)""".stripMargin('!')
+      Node2("Bar", 3).asTreeString mustBe """Node2(suffix = "Bar", position = 3)"""
 
     def `render a case class with 3-arity`: Unit =
       Node3("Bar", 3, List("stuff", "that", "works")).asTreeString mustBe
@@ -55,22 +51,19 @@ class TreeStringSpec extends Spec with MustMatchers {
           !)""".stripMargin('!')
 
     def `render a case class with 5-arity`: Unit = {
-      Node5("Zap",
+      Node5(
+        suffix = Some("Zap"),
         top = Node1("Bap"),
-        left = Node3("Bar", 3, List("stuff", "that", "works")),
+        left = Node3("Bar", 3, List("cool", "stuff")),
         right = Node4("Baz", 5, Node3("Bar", 3, List("stuff", "that", "works"))),
         bottom = Node0).asTreeString mustBe
         """Node5(
-          !- suffix = "Zap"
+          !- suffix = Some("Zap")
           !- top = Node1(suffix = "Bap")
           !- left = Node3(
           !| - suffix = "Bar"
           !| - position = 3
-          !| - names = List(
-          !| | - "stuff"
-          !| | - "that"
-          !| | - "works"
-          !| | )
+          !| - names = List("cool", "stuff")
           !| )
           !- right = Node4(
           !| - suffix = "Baz"
