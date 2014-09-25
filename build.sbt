@@ -24,6 +24,7 @@ graphSettings
 
 libraryDependencies <<= scalaVersion { scala_version ⇒ Seq(
     "org.scala-lang" % "scala-library" % scala_version,
+    "org.scala-lang" % "scala-reflect" % scala_version,
     "org.slf4j" % "slf4j-api" % "1.7.7",
     "org.slf4j" % "slf4j-ext" % "1.7.7",
     "org.apache.logging.log4j" % "log4j-api" % "2.0.1" % "test",
@@ -31,7 +32,7 @@ libraryDependencies <<= scalaVersion { scala_version ⇒ Seq(
     "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.0.1" % "test",
     "com.lmax" % "disruptor" % "3.2.1" % "test",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test",
-    "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.97" % "test"
+    "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.101" % "test"
   ) ++ (
     CrossVersion.partialVersion(scala_version) match {
       case Some((2, scalaMajor)) if scalaMajor >= 11 ⇒ Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.2")
