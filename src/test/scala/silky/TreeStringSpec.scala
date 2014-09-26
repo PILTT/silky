@@ -20,7 +20,11 @@ class TreeStringSpec extends Spec with MustMatchers {
       Node1("Bar").asTreeString mustBe "Node1(suffix = \"Bar\")"
 
     def `render a case class with 2-arity`: Unit =
-      Node2("Bar", 3).asTreeString mustBe """Node2(suffix = "Bar", position = 3)"""
+      Node2("Bar", 3).asTreeString mustBe
+        """Node2(
+          !- suffix = "Bar"
+          !- position = 3
+          !)""".stripMargin('!')
 
     def `render a case class with 3-arity`: Unit =
       Node3("Bar", 3, List("stuff", "that", "works")).asTreeString mustBe
@@ -54,8 +58,8 @@ class TreeStringSpec extends Spec with MustMatchers {
       Node5(
         suffix = Some("Zap"),
         top = Node1("Bap"),
-        left = Node3("Bar", 3, List("cool", "stuff")),
-        right = Node4("Baz", 5, Node3("Bar", 3, List("stuff", "that", "works"))),
+        left = Node3("Bar", 3, List("cool stuff")),
+        right = Node4("Baz", 5, Node3("Bar", 3, List("cool", "stuff"))),
         bottom = Node0).asTreeString mustBe
         """Node5(
           !- suffix = Some("Zap")
@@ -63,7 +67,7 @@ class TreeStringSpec extends Spec with MustMatchers {
           !- left = Node3(
           !| - suffix = "Bar"
           !| - position = 3
-          !| - names = List("cool", "stuff")
+          !| - names = List("cool stuff")
           !| )
           !- right = Node4(
           !| - suffix = "Baz"
@@ -72,9 +76,8 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| | - suffix = "Bar"
           !| | - position = 3
           !| | - names = List(
+          !| | | - "cool"
           !| | | - "stuff"
-          !| | | - "that"
-          !| | | - "works"
           !| | | )
           !| | )
           !| )

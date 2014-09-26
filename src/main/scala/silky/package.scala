@@ -22,11 +22,11 @@ package object silky {
 
     private def treeStringOf(s: Stream[_]): String = {
       val result = s.map(_.asTreeString)
-      if (result.size < 3) result.mkString(", ") else result.map(indent).mkString(lineSeparator)
+      if (result.size < 2) result.mkString(", ") else result.map(indent).mkString(lineSeparator)
     }
 
     private def treeStringOf(t: Traversable[_]): String =
-      if (t.size < 3)
+      if (t.size < 2)
         s"${t.stringPrefix}(${t.map(_.asTreeString).mkString(", ")})"
       else
         s"""${t.stringPrefix}($lineSeparator${
@@ -47,7 +47,7 @@ package object silky {
 
       p.productArity match {
         case 0 ⇒ p.productPrefix
-        case n if n < 3 ⇒ s"${p.productPrefix}(${fields.asTreeString})"
+        case n if n < 2 ⇒ s"${p.productPrefix}(${fields.asTreeString})"
         case _ ⇒ s"${p.productPrefix}($lineSeparator${fields.asTreeString}$lineSeparator)"
       }
     }
