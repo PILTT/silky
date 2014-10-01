@@ -1,13 +1,19 @@
+import scala.annotation.implicitNotFound
 import scala.reflect.runtime.universe._
 import scala.reflect.runtime._
 import scala.util.Properties.lineSeparator
 
 package object silky {
 
+  @implicitNotFound("No member of type class ShowTree in scope for ${T}")
+  trait ShowTree[T] {
+    def treeStringOf(value: T): String
+  }
+
   implicit class TreeString[A](a: A) {
 
     /** @return A readable string representation of this value */
-    def asTreeString: String = a match {
+    def asTreeString(implicit converter: Option[ShowTree[A]] = None): String = a match {
       case (k, v)            ⇒ s"$k = ${v.asTreeString}"
       case v: Stream[_]      ⇒ treeStringOf(v)
       case v: Traversable[_] ⇒ treeStringOf(v)
@@ -17,7 +23,7 @@ package object silky {
       case v: Product        ⇒ treeStringOf(v)
       case v: String         ⇒ s""""$v""""
       case null              ⇒ "null"
-      case _                 ⇒ a.toString
+      case _                 ⇒ converter.fold(a.toString) { _.treeStringOf(a) }
     }
 
     private def treeStringOf(s: Stream[_]): String = {

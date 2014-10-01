@@ -1,6 +1,6 @@
 package silky
 
-import org.scalatest.{MustMatchers, Spec}
+import org.scalatest.{Ignore, MustMatchers, Spec}
 
 class TreeStringSpec extends Spec with MustMatchers {
   import TreeStringSpec._
@@ -81,6 +81,23 @@ class TreeStringSpec extends Spec with MustMatchers {
 
     def `render a case class with a private parameter`: Unit =
       Node6("Bar").asTreeString mustBe "Node6()"
+
+    def `render a class that does not override toString`: Unit = {
+      new Stuff(Node1("it"), Node1("well")).asTreeString mustBe
+        """Stuff(
+          !- top = Node1(suffix = "it")
+          !- bottom = Node1(suffix = "well")
+          !)""".stripMargin('!')
+    }
+
+    @Ignore
+    def `render a case class containing an object that does not override toString`: Unit =
+      Node7(new Stuff(Node1("it"), Node1("well"))).asTreeString mustBe
+        """Node7(contents = Stuff(
+          !| - top = Node1(suffix = "it")
+          !| - bottom = Node1(suffix = "well")
+          !| )
+          !)""".stripMargin('!')
   }
 }
 
@@ -92,4 +109,15 @@ object TreeStringSpec {
   case class Node4(suffix: String, position: Int, contact: Node3)
   case class Node5(suffix: Option[String], top: Node1, left: Node3, right: Node4, bottom: Node0.type)
   case class Node6(private val suffix: String)
+  case class Node7(contents: Stuff)
+
+  class Stuff(val top: Node1, val bottom: Node1)
+
+  implicit val fooShowTree: Option[ShowTree[Stuff]] = Some(new ShowTree[Stuff] {
+    def treeStringOf(value: Stuff) =
+      s"""Stuff(
+           !- top = ${value.top.asTreeString}
+           !- bottom = ${value.bottom.asTreeString}
+           !)""".stripMargin('!')
+  })
 }
