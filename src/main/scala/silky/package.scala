@@ -36,12 +36,14 @@ package object silky {
         }$lineSeparator)"""
 
     private def treeStringOf(p: Product): String = {
+      def isAccessible(ts: TermSymbol) = (ts.isVal || ts.isVar) && ts.getter != NoSymbol && !ts.getter.isPrivate
+
       val fields = currentMirror.reflect(p).symbol.typeSignature.members.toStream
         .collect { case a: TermSymbol ⇒ a }
         .filterNot(_.isMethod)
         .filterNot(_.isModule)
         .filterNot(_.isClass)
-        .filter(s ⇒ s.isTerm && (s.asTerm.isVal || s.asTerm.isVar) && s.asTerm.getter != NoSymbol && !s.asTerm.getter.isPrivate)
+        .filter(s ⇒ s.isTerm && isAccessible(s.asTerm))
         .map(currentMirror.reflect(p).reflectField)
         .map(f ⇒ f.symbol.name.toString.trim → f.get)
         .reverse
