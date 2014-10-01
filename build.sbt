@@ -32,6 +32,7 @@ libraryDependencies <<= scalaVersion { scala_version ⇒ Seq(
     "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.0.1" % "test",
     "com.lmax" % "disruptor" % "3.2.1" % "test",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test",
+    "org.scalaz" %% "scalaz-core" % "7.1.0" % "test",
     "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.101" % "test"
   ) ++ (
     CrossVersion.partialVersion(scala_version) match {

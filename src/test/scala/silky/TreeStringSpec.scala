@@ -2,6 +2,8 @@ package silky
 
 import org.scalatest.{Ignore, MustMatchers, Spec}
 
+import scalaz.NonEmptyList
+
 class TreeStringSpec extends Spec with MustMatchers {
   import TreeStringSpec._
 
@@ -90,12 +92,26 @@ class TreeStringSpec extends Spec with MustMatchers {
           !)""".stripMargin('!')
     }
 
+    def `render a class that overrides toString`: Unit =
+      NonEmptyList(Node1("a"), Node1("b"), Node1("c")).asTreeString mustBe
+        """NonEmptyList(
+          !- Node1(suffix = "a")
+          !- Node1(suffix = "b")
+          !- Node1(suffix = "c")
+          !)""".stripMargin('!')
+
     @Ignore
     def `render a case class containing an object that does not override toString`: Unit =
-      Node7(new Stuff(Node1("it"), Node1("well"))).asTreeString mustBe
-        """Node7(contents = Stuff(
+      Node7(new Stuff(Node1("it"), Node1("well")), NonEmptyList(Node1("a"), Node1("b"), Node1("c"))).asTreeString mustBe
+        """Node7(
+          !- contents = Stuff(
           !| - top = Node1(suffix = "it")
           !| - bottom = Node1(suffix = "well")
+          !| )
+          !- bits = NonEmptyList(
+          !| - Node1(suffix = "a")
+          !| - Node1(suffix = "b")
+          !| - Node1(suffix = "c")
           !| )
           !)""".stripMargin('!')
   }
@@ -109,15 +125,19 @@ object TreeStringSpec {
   case class Node4(suffix: String, position: Int, contact: Node3)
   case class Node5(suffix: Option[String], top: Node1, left: Node3, right: Node4, bottom: Node0.type)
   case class Node6(private val suffix: String)
-  case class Node7(contents: Stuff)
+  case class Node7(contents: Stuff, bits: NonEmptyList[Node1])
 
   class Stuff(val top: Node1, val bottom: Node1)
 
-  implicit val fooShowTree: Option[ShowTree[Stuff]] = Some(new ShowTree[Stuff] {
+  implicit def showStuff: Option[ShowTree[Stuff]] = Some(new ShowTree[Stuff] {
     def treeStringOf(value: Stuff) =
       s"""Stuff(
            !- top = ${value.top.asTreeString}
            !- bottom = ${value.bottom.asTreeString}
            !)""".stripMargin('!')
+  })
+
+  implicit def showNonEmptyList[T]: Option[ShowTree[NonEmptyList[T]]] = Some(new ShowTree[NonEmptyList[T]] {
+    def treeStringOf(value: NonEmptyList[T]) = s"NonEmpty${value.list.asTreeString}"
   })
 }
