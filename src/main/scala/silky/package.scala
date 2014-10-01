@@ -41,6 +41,7 @@ package object silky {
         .filterNot(_.isMethod)
         .filterNot(_.isModule)
         .filterNot(_.isClass)
+        .filter(s ⇒ s.isTerm && (s.asTerm.isVal || s.asTerm.isVar) && s.asTerm.getter != NoSymbol && !s.asTerm.getter.isPrivate)
         .map(currentMirror.reflect(p).reflectField)
         .map(f ⇒ f.symbol.name.toString.trim → f.get)
         .reverse

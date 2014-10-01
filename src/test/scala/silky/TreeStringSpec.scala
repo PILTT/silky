@@ -3,13 +3,7 @@ package silky
 import org.scalatest.{MustMatchers, Spec}
 
 class TreeStringSpec extends Spec with MustMatchers {
-
-  case object Node0
-  case class Node1(suffix: String)
-  case class Node2(suffix: String, position: Int)
-  case class Node3(suffix: String, position: Int, names: List[String])
-  case class Node4(suffix: String, position: Int, contact: Node3)
-  case class Node5(suffix: Option[String], top: Node1, left: Node3, right: Node4, bottom: Node0.type)
+  import TreeStringSpec._
 
   object `AnyTreeString can` {
 
@@ -84,5 +78,18 @@ class TreeStringSpec extends Spec with MustMatchers {
           !- bottom = Node0
           !)""".stripMargin('!')
     }
+
+    def `render a case class with a private parameter`: Unit =
+      Node6("Bar").asTreeString mustBe "Node6()"
   }
+}
+
+object TreeStringSpec {
+  case object Node0
+  case class Node1(suffix: String)
+  case class Node2(suffix: String, position: Int)
+  case class Node3(suffix: String, position: Int, names: List[String])
+  case class Node4(suffix: String, position: Int, contact: Node3)
+  case class Node5(suffix: Option[String], top: Node1, left: Node3, right: Node4, bottom: Node0.type)
+  case class Node6(private val suffix: String)
 }
