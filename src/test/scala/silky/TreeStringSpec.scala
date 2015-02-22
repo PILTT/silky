@@ -58,7 +58,7 @@ class TreeStringSpec extends Spec with MustMatchers {
         right  = Node4("Baz", 5, Node3("Bar", 3, List("cool", "stuff"))),
         bottom = Node0).asTreeString mustBe
         """Node5(
-          !- suffix = Some("Zap")
+          !- suffix = Some(x = "Zap")
           !- top = Node1(suffix = "Bap")
           !- left = Node3(
           !| - suffix = "Bar"
@@ -125,6 +125,27 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - Node1(suffix = "c")
           !| )
           !))""".stripMargin('!')
+
+    def `render a class with a missing optional parameter`: Unit =
+      new Stuff3(None).asTreeString mustBe "Stuff3(node = None)"
+
+    def `render a class containing optional objects for which ShowTree instances exist`: Unit =
+      new Stuff3(
+        Some(Node8(
+          head = new OptionalStuff(Some(Node1("top")), None),
+          tail = NonEmptyList(new OptionalStuff(Some(Node1("x")), Some(Node1("y"))))
+        ))).asTreeString mustBe
+        """Stuff3(node = Some(Node8(
+          !- head = OptionalStuff(
+          !| - top = Some(Node1(suffix = "top"))
+          !| - bottom = None
+          !| )
+          !- tail = NonEmptyList(OptionalStuff(
+          !| - top = Some(Node1(suffix = "x"))
+          !| - bottom = Some(Node1(suffix = "y"))
+          !| ))
+          !)))""".
+          stripMargin('!')
   }
 }
 
@@ -137,9 +158,13 @@ object TreeStringSpec {
   case class Node5(suffix: Option[String], top: Node1, left: Node3, right: Node4, bottom: Node0.type)
   case class Node6(private val suffix: String)
   case class Node7(contents: Stuff, bits: NonEmptyList[Node1])
+  case class Node8(head: OptionalStuff, tail: NonEmptyList[OptionalStuff])
 
   class Stuff(val top: Node1, val bottom: Node1)
   class Stuff2(val node: Node7)
+
+  class OptionalStuff(val top: Option[Node1], val bottom: Option[Node1])
+  class Stuff3(val node: Option[Node8])
 
   implicit def showStuff: Option[ShowTree[Stuff]] = Some(new ShowTree[Stuff] {
     def treeStringOf(value: Stuff) = s"""Stuff(
@@ -157,7 +182,23 @@ object TreeStringSpec {
       !)""".stripMargin('!')
   })
 
-  implicit def showNonEmptyList[T]: Option[ShowTree[NonEmptyList[T]]] = Some(new ShowTree[NonEmptyList[T]] {
-    def treeStringOf(value: NonEmptyList[T]) = s"NonEmpty${value.list.asTreeString}"
+  implicit def showOptionalStuff(implicit sn1: Option[ShowTree[Option[Node1]]]): Option[ShowTree[OptionalStuff]] = Some(new ShowTree[OptionalStuff] {
+    def treeStringOf(value: OptionalStuff) = s"""OptionalStuff(
+      !${indent(Seq(s"top = ${sn1.get.treeStringOf(value.top)}", s"bottom = ${sn1.get.treeStringOf(value.bottom)}"))}
+      !)""".stripMargin('!')
+  })
+
+  implicit def showStuff3(implicit sn8: Option[ShowTree[Option[Node8]]]): Option[ShowTree[Stuff3]] = Some(new ShowTree[Stuff3] {
+    def treeStringOf(value: Stuff3) = s"Stuff3(node = ${value.node.asTreeString})"
+  })
+
+  implicit def showNode8(implicit sos: Option[ShowTree[OptionalStuff]], sn: Option[ShowTree[NonEmptyList[OptionalStuff]]]): Option[ShowTree[Node8]] = Some(new ShowTree[Node8] {
+    def treeStringOf(value: Node8) = s"""Node8(
+      !${indent(Seq(s"head = ${sos.get.treeStringOf(value.head)}", s"tail = ${sn.get.treeStringOf(value.tail)}"))}
+      !)""".stripMargin('!')
+  })
+
+  implicit def showNonEmptyList[T](implicit st: Option[ShowTree[List[T]]]): Option[ShowTree[NonEmptyList[T]]] = Some(new ShowTree[NonEmptyList[T]] {
+    def treeStringOf(value: NonEmptyList[T]) = s"NonEmpty${st.get.treeStringOf(value.list)}"
   })
 }
