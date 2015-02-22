@@ -7,7 +7,7 @@ import scalaz.NonEmptyList
 class TreeStringSpec extends Spec with MustMatchers {
   import TreeStringSpec._
 
-  object `AnyTreeString can` {
+  object `The implicitly exposed TreeString.asTreeString can` {
 
     def `render a case object`: Unit =
       Node0.asTreeString mustBe "Node0"
@@ -50,12 +50,12 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| )
           !)""".stripMargin('!')
 
-    def `render a case class with 5-arity`: Unit = {
+    def `render a case class with 5-arity`: Unit =
       Node5(
         suffix = Some("Zap"),
-        top = Node1("Bap"),
-        left = Node3("Bar", 3, List("cool stuff")),
-        right = Node4("Baz", 5, Node3("Bar", 3, List("cool", "stuff"))),
+        top    = Node1("Bap"),
+        left   = Node3("Bar", 3, List("cool stuff")),
+        right  = Node4("Baz", 5, Node3("Bar", 3, List("cool", "stuff"))),
         bottom = Node0).asTreeString mustBe
         """Node5(
           !- suffix = Some("Zap")
@@ -79,18 +79,16 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| )
           !- bottom = Node0
           !)""".stripMargin('!')
-    }
 
     def `render a case class with a private parameter`: Unit =
       Node6("Bar").asTreeString mustBe "Node6()"
 
-    def `render a class that does not override toString`: Unit = {
+    def `render a class that does not override toString`: Unit =
       new Stuff(Node1("it"), Node1("well")).asTreeString mustBe
         """Stuff(
           !- top = Node1(suffix = "it")
           !- bottom = Node1(suffix = "well")
           !)""".stripMargin('!')
-    }
 
     def `render a class that overrides toString`: Unit =
       NonEmptyList(Node1("a"), Node1("b"), Node1("c")).asTreeString mustBe
@@ -114,7 +112,7 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| )
           !)""".stripMargin('!')
 
-    def `render a class containing objects for which ShowTree instances exist`: Unit = {
+    def `render a class containing objects for which ShowTree instances exist`: Unit =
       new Stuff2(Node7(new Stuff(Node1("it"), Node1("well")), NonEmptyList(Node1("a"), Node1("b"), Node1("c")))).asTreeString mustBe
         """Stuff2(node = Node7(
           !- contents = Stuff(
@@ -127,7 +125,6 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - Node1(suffix = "c")
           !| )
           !))""".stripMargin('!')
-    }
   }
 }
 
