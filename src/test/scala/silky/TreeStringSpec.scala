@@ -1,6 +1,6 @@
 package silky
 
-import org.scalatest.{Ignore, MustMatchers, Spec}
+import org.scalatest.{MustMatchers, Spec}
 
 import scalaz.NonEmptyList
 
@@ -100,8 +100,7 @@ class TreeStringSpec extends Spec with MustMatchers {
           !- Node1(suffix = "c")
           !)""".stripMargin('!')
 
-    @Ignore
-    def `render a case class containing an object that does not override toString`: Unit =
+    def `render a case class containing objects for which ShowTree instances exist`: Unit =
       Node7(new Stuff(Node1("it"), Node1("well")), NonEmptyList(Node1("a"), Node1("b"), Node1("c"))).asTreeString mustBe
         """Node7(
           !- contents = Stuff(
@@ -114,6 +113,21 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - Node1(suffix = "c")
           !| )
           !)""".stripMargin('!')
+
+    def `render a class containing objects for which ShowTree instances exist`: Unit = {
+      new Stuff2(Node7(new Stuff(Node1("it"), Node1("well")), NonEmptyList(Node1("a"), Node1("b"), Node1("c")))).asTreeString mustBe
+        """Stuff2(node = Node7(
+          !- contents = Stuff(
+          !| - top = Node1(suffix = "it")
+          !| - bottom = Node1(suffix = "well")
+          !| )
+          !- bits = NonEmptyList(
+          !| - Node1(suffix = "a")
+          !| - Node1(suffix = "b")
+          !| - Node1(suffix = "c")
+          !| )
+          !))""".stripMargin('!')
+    }
   }
 }
 
@@ -128,13 +142,22 @@ object TreeStringSpec {
   case class Node7(contents: Stuff, bits: NonEmptyList[Node1])
 
   class Stuff(val top: Node1, val bottom: Node1)
+  class Stuff2(val node: Node7)
 
   implicit def showStuff: Option[ShowTree[Stuff]] = Some(new ShowTree[Stuff] {
-    def treeStringOf(value: Stuff) =
-      s"""Stuff(
-           !- top = ${value.top.asTreeString}
-           !- bottom = ${value.bottom.asTreeString}
-           !)""".stripMargin('!')
+    def treeStringOf(value: Stuff) = s"""Stuff(
+      !${indent(Seq(s"top = ${value.top.asTreeString}", s"bottom = ${value.bottom.asTreeString}"))}
+      !)""".stripMargin('!')
+  })
+
+  implicit def showStuff2(implicit sn7: Option[ShowTree[Node7]]): Option[ShowTree[Stuff2]] = Some(new ShowTree[Stuff2] {
+    def treeStringOf(value: Stuff2) = s"Stuff2(node = ${sn7.get.treeStringOf(value.node)})"
+  })
+
+  implicit def showNode7(implicit ss: Option[ShowTree[Stuff]], sn: Option[ShowTree[NonEmptyList[Node1]]]): Option[ShowTree[Node7]] = Some(new ShowTree[Node7] {
+    def treeStringOf(value: Node7) = s"""Node7(
+      !${indent(Seq(s"contents = ${ss.get.treeStringOf(value.contents)}", s"bits = ${sn.get.treeStringOf(value.bits)}"))}
+      !)""".stripMargin('!')
   })
 
   implicit def showNonEmptyList[T]: Option[ShowTree[NonEmptyList[T]]] = Some(new ShowTree[NonEmptyList[T]] {

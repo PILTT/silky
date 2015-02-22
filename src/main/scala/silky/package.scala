@@ -20,7 +20,8 @@ package object silky {
       case Some(v)           ⇒ s"Some(${v.asTreeString})"
       case Left(v)           ⇒ s"Left(${v.asTreeString})"
       case Right(v)          ⇒ s"Right(${v.asTreeString})"
-      case v: Product        ⇒ treeStringOf(v)
+      case v: Product
+        if converter.isEmpty  ⇒ treeStringOf(v)
       case v: String         ⇒ s""""$v""""
       case null              ⇒ "null"
       case _                 ⇒ converter.fold(a.toString) { _.treeStringOf(a) }
@@ -60,10 +61,12 @@ package object silky {
         case _ ⇒ s"${p.productPrefix}($lineSeparator${fields.asTreeString}$lineSeparator)"
       }
     }
+  }
 
-    private def indent: String ⇒ String = string ⇒ string.lines.toStream match {
-      case h +: t ⇒ (s"- $h" +: t.map{ "| " + _ }) mkString lineSeparator
-      case _      ⇒ "- "
-    }
+  def indent(t: Seq[String]): String = t map indent mkString lineSeparator
+
+  private def indent: String ⇒ String = string ⇒ string.lines.toStream match {
+    case h +: t ⇒ (s"- $h" +: t.map{ "| " + _ }) mkString lineSeparator
+    case _      ⇒ "- "
   }
 }
