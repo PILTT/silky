@@ -27,7 +27,7 @@ class TreeStringSpec extends Spec with MustMatchers {
         """Node3(
           !- suffix = "Bar"
           !- position = 3
-          !- names = List(
+          !- names = Seq(
           !| - "stuff"
           !| - "that"
           !| - "works"
@@ -42,7 +42,7 @@ class TreeStringSpec extends Spec with MustMatchers {
           !- contact = Node3(
           !| - suffix = "Bar"
           !| - position = 3
-          !| - names = List(
+          !| - names = Seq(
           !| | - "stuff"
           !| | - "that"
           !| | - "works"
@@ -63,7 +63,7 @@ class TreeStringSpec extends Spec with MustMatchers {
           !- left = Node3(
           !| - suffix = "Bar"
           !| - position = 3
-          !| - names = List("cool stuff")
+          !| - names = Seq("cool stuff")
           !| )
           !- right = Node4(
           !| - suffix = "Baz"
@@ -71,7 +71,7 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - contact = Node3(
           !| | - suffix = "Bar"
           !| | - position = 3
-          !| | - names = List(
+          !| | - names = Seq(
           !| | | - "cool"
           !| | | - "stuff"
           !| | | )
@@ -146,6 +146,37 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| ))
           !)))""".
           stripMargin('!')
+
+    def `render a case class containing different types of collections`: Unit =
+      Node9(
+        seq   = Seq(Node1("a1"), Node1("a2")),
+        set   = Set(Node1("b1"), Node1("b2")),
+        list  = Node1("c1") :: Node1("c2") :: Nil,
+        array = Array(Node1("d1"), Node1("d2")),
+        nodes = Node1("e1"), Node1("e2")
+      ).asTreeString mustBe
+        """Node9(
+          !- seq = Seq(
+          !| - Node1(suffix = "a1")
+          !| - Node1(suffix = "a2")
+          !| )
+          !- set = Set(
+          !| - Node1(suffix = "b1")
+          !| - Node1(suffix = "b2")
+          !| )
+          !- list = Seq(
+          !| - Node1(suffix = "c1")
+          !| - Node1(suffix = "c2")
+          !| )
+          !- array = Array(
+          !| - Node1(suffix = "d1")
+          !| - Node1(suffix = "d2")
+          !| )
+          !- nodes = Array(
+          !| - Node1(suffix = "e1")
+          !| - Node1(suffix = "e2")
+          !| )
+          !)""".stripMargin('!')
   }
 }
 
@@ -159,6 +190,7 @@ object TreeStringSpec {
   case class Node6(private val suffix: String)
   case class Node7(contents: Stuff, bits: NonEmptyList[Node1])
   case class Node8(head: OptionalStuff, tail: NonEmptyList[OptionalStuff])
+  case class Node9(seq: Seq[Node1], set: Set[Node1], list: List[Node1], array: Array[Node1], nodes: Node1*)
 
   class Stuff(val top: Node1, val bottom: Node1)
   class Stuff2(val node: Node7)
@@ -199,6 +231,6 @@ object TreeStringSpec {
   })
 
   implicit def showNonEmptyList[T](implicit st: Option[ShowTree[List[T]]]): Option[ShowTree[NonEmptyList[T]]] = Some(new ShowTree[NonEmptyList[T]] {
-    def treeStringOf(value: NonEmptyList[T]) = s"NonEmpty${st.get.treeStringOf(value.list)}"
+    def treeStringOf(value: NonEmptyList[T]) = s"NonEmptyList${st.get.treeStringOf(value.list).replaceFirst("Seq", "")}"
   })
 }

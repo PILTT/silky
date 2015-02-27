@@ -31,6 +31,7 @@ package object silky {
       case (k, v)            ⇒ s"$k = ${v.asTreeString}"
       case v: Stream[_]      ⇒ treeStringOf(v)
       case v: Traversable[_] ⇒ traversableAsTreeString(v)
+      case v: Array[_]       ⇒ traversableAsTreeString(v)
       case Left(v)           ⇒ s"Left(${v.asTreeString})"
       case Right(v)          ⇒ s"Right(${v.asTreeString})"
       case v: Product
@@ -48,13 +49,18 @@ package object silky {
 
   private def traversableAsTreeString[T](t: Traversable[T])(implicit st: Option[ShowTree[T]] = None): String =
     if (t.size < 2)
-      s"${t.stringPrefix}(${t.map(_.asTreeString(st)).mkString(", ")})"
+      s"${stringPrefix(t)}(${t.map(_.asTreeString(st)).mkString(", ")})"
     else
-      s"""${t.stringPrefix}($lineSeparator${
+      s"""${stringPrefix(t)}($lineSeparator${
         t.map(_.asTreeString(st))
           .map(indent)
           .mkString(lineSeparator)
       }$lineSeparator)"""
+
+  private def stringPrefix[T](t: Traversable[T]): String = t match {
+    case _: List[T] ⇒ "Seq"
+    case _ ⇒ if (t.stringPrefix == "WrappedArray") "Array" else t.stringPrefix
+  }
 
   private def productAsTreeString[T <: Product](p: T)(implicit tag: ClassTag[T]) = {
     def isAccessible(ts: TermSymbol) = (ts.isVal || ts.isVar) && ts.getter != NoSymbol && !ts.getter.isPrivate
