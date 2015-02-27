@@ -8,7 +8,7 @@ version := Try(sys.env("BUILD_NUMBER")).map("1.0." + _).getOrElse("1.0-SNAPSHOT"
 
 scalaVersion := "2.10.4"
 
-crossScalaVersions := Seq("2.10.4", "2.11.4")
+crossScalaVersions := Seq("2.10.4", "2.11.5")
 
 javacOptions ++= Seq("-Xms512m", "-Xmx512m", "-Xss4m")
 
@@ -25,18 +25,18 @@ graphSettings
 libraryDependencies <<= scalaVersion { scala_version ⇒ Seq(
     "org.scala-lang" % "scala-library" % scala_version,
     "org.scala-lang" % "scala-reflect" % scala_version,
-    "org.slf4j" % "slf4j-api" % "1.7.7",
-    "org.slf4j" % "slf4j-ext" % "1.7.7",
-    "org.apache.logging.log4j" % "log4j-api" % "2.1" % "test",
-    "org.apache.logging.log4j" % "log4j-core" % "2.1" % "test",
-    "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.1" % "test",
-    "com.lmax" % "disruptor" % "3.2.1" % "test",
-    "org.scalatest" %% "scalatest" % "2.2.1" % "test",
-    "org.scalaz" %% "scalaz-core" % "7.1.0" % "test",
-    "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.102" % "test"
+    "org.slf4j" % "slf4j-api" % "1.7.10",
+    "org.slf4j" % "slf4j-ext" % "1.7.10",
+    "org.apache.logging.log4j" % "log4j-api" % "2.2" % "test",
+    "org.apache.logging.log4j" % "log4j-core" % "2.2" % "test",
+    "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.2" % "test",
+    "com.lmax" % "disruptor" % "3.3.0" % "test",
+    "org.scalatest" %% "scalatest" % "2.2.4" % "test",
+    "org.scalaz" %% "scalaz-core" % "7.1.1" % "test",
+    "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.108" % "test"
   ) ++ (
     CrossVersion.partialVersion(scala_version) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 11 ⇒ Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.2")
+      case Some((2, scalaMajor)) if scalaMajor >= 11 ⇒ Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.3")
       case _ ⇒ Seq.empty
     }
   )
