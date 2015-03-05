@@ -6,6 +6,7 @@ jdk:
 
 before_script: ./scripts/prepublish.sh
 script: ./scripts/ci-build.sh
+after_success: sbt coveralls
 
 env:
   global:
@@ -13,6 +14,7 @@ env:
   - secure: S3kNt4FDxqFZpxhagR20wnx+vnSOzIPQOwGnY3tJF+JxH1eKxQhgEsO13dGOtAkRR5wPq/HckAuSax6Q1d5TW88Y4CdMre6tcfMTv717nmISe+G/c8/2BZWOEnpiGtdw+wU1u649GOFmbBpyA5WXIGLTXOxUkCTbNjycYwI3ZUk=
   - secure: txEHpuBiKf5hFBS1OsbFjx9+VqqVlEYINOLasaD3Xb2Y3kr1eomqnGemYUcN06R6RTn+a8Ma74zc+WGdIJourZnQXJ325oAs9F4gDdtYm00ce9WK9iK/aeRIwZegNpVXAyTHqyzh1/Wfa+vhGmbYiNGC4G4CH7Azb1oFwsdcOf0=
   - secure: I2Tc2YOzNgnomV+AphTCb+aHwLoBIcWZK9EN0bHccxQxQKr2p0Xq+J2OigGud2Gb9TQ0tScPAsj+a/0BD4Esj8PQUSsp7h35UUjwiC5XkbLXKFnp8BGBAuOmLLoSOFic2Q85EDoS0L1Y/xvD4IdGLef0QHJf7/YHST2i8UrlXyU=
+  - secure: V1Dw4sJrw36E0cIidC98LJp4Z7spjCIOz3MDXUhu8FIlYXp05zavqdi0pV8u0cMbKAJn/s6KJmGKEPcyYnMuh0LK8X+ruAKe0UKaDC5/9h+0Xpjxi0tAQ7JFxf4+i64fq601KzeHagjnpwefnpkpMH77L9LdVXvQioXntvx7NSM=
 
 notifications:
   webhooks:

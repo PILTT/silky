@@ -15,6 +15,7 @@ javacOptions ++= Seq("-Xms512m", "-Xmx512m", "-Xss4m")
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
 
 resolvers ++= Seq(
+  Classpaths.sbtPluginReleases,
   "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/",
   "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype OSS Public Repositories" at "https://oss.sonatype.org/content/groups/public/"
