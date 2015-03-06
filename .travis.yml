@@ -6,7 +6,7 @@ jdk:
 
 before_script: ./scripts/prepublish.sh
 script:        ./scripts/ci-build.sh
-after_success: "sbt coveralls"
+after_success: ./scripts/publish.sh
 
 env:
   global:
