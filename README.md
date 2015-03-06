@@ -1,7 +1,7 @@
-Silky
+silky
 =====
 
-Silky is a library that helps capture and trace message flows across a system of Scala applications.
+A library that helps capture and trace message flows across a system of Scala applications.
 
 It is currently a superficial port of [Tracey](http://code.google.com/p/tracey/), a Java library created by Mike Hogan.
 
