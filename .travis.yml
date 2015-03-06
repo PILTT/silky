@@ -5,8 +5,8 @@ jdk:
 - openjdk6
 
 before_script: ./scripts/prepublish.sh
-script: ./scripts/ci-build.sh
-after_success: sbt coveralls
+script:        ./scripts/ci-build.sh
+after_success: "sbt coveralls"
 
 env:
   global:

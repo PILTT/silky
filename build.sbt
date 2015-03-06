@@ -15,7 +15,6 @@ javacOptions ++= Seq("-Xms512m", "-Xmx512m", "-Xss4m")
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
 
 resolvers ++= Seq(
-  Classpaths.sbtPluginReleases,
   "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/",
   "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype OSS Public Repositories" at "https://oss.sonatype.org/content/groups/public/"
@@ -23,7 +22,7 @@ resolvers ++= Seq(
 
 graphSettings
 
-libraryDependencies <<= scalaVersion { scala_version ⇒ Seq(
+libraryDependencies <++= scalaVersion { scala_version ⇒ Seq(
     "org.scala-lang" % "scala-library" % scala_version,
     "org.scala-lang" % "scala-reflect" % scala_version,
     "org.slf4j" % "slf4j-api" % "1.7.10",
