@@ -15,8 +15,8 @@ javacOptions ++= Seq("-Xms512m", "-Xmx512m", "-Xss4m")
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
 
 resolvers ++= Seq(
-  "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/",
-  "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
+  "Sonatype OSS Releases"            at "http://oss.sonatype.org/content/repositories/releases/",
+  "Sonatype OSS Snapshots"           at "http://oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype OSS Public Repositories" at "https://oss.sonatype.org/content/groups/public/"
 )
 
@@ -30,7 +30,6 @@ libraryDependencies <++= scalaVersion { scala_version ⇒ Seq(
     "org.apache.logging.log4j" % "log4j-api" % "2.2" % "test",
     "org.apache.logging.log4j" % "log4j-core" % "2.2" % "test",
     "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.2" % "test",
-    "com.lmax" % "disruptor" % "3.3.0" % "test",
     "org.scalatest" %% "scalatest" % "2.2.4" % "test",
     "org.scalaz" %% "scalaz-core" % "7.1.1" % "test",
     "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.108" % "test"
