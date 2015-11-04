@@ -3,6 +3,7 @@ scala:
 - 2.10.6
 jdk:
 - oraclejdk7
+sudo: false
 
 before_script: ./scripts/prepublish.sh
 script:        ./scripts/ci-build.sh
