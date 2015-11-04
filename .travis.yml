@@ -1,6 +1,6 @@
 language: scala
 scala:
-- 2.10.4
+- 2.10.6
 jdk:
 - openjdk6
 
@@ -22,4 +22,4 @@ notifications:
       - https://webhooks.gitter.im/e/53c9a40b5bc903ea0605
     on_success: change
     on_failure: always
-    on_start:   false
+    on_start:   never
