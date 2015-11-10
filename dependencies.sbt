@@ -4,25 +4,24 @@ resolvers ++= Seq(
   "Sonatype OSS Public Repositories" at "https://oss.sonatype.org/content/groups/public/"
 )
 
-val jacksonVersion = "2.6.2"
-val log4jVersion   = "2.4.1"
-val slf4jVersion   = "1.7.12"
+val log4jVersion = "[2.0.1,2.9.99]"
+val slf4jVersion = "[1.7.0,1.9.99]"
 
 val slf4j = Seq(
-  "org.slf4j" % "slf4j-api" % slf4jVersion,
-  "org.slf4j" % "slf4j-ext" % slf4jVersion
+  "org.slf4j" % "slf4j-api" % slf4jVersion % "provided",
+  "org.slf4j" % "slf4j-ext" % slf4jVersion % "provided"
 )
 
 val log4j = Seq(
   "org.apache.logging.log4j" % "log4j-api"        % log4jVersion % "test",
   "org.apache.logging.log4j" % "log4j-core"       % log4jVersion % "test",
   "org.apache.logging.log4j" % "log4j-slf4j-impl" % log4jVersion % "test",
-  "com.fasterxml.jackson.core"       % "jackson-databind"        % jacksonVersion % "test",
-  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion % "test"
+  "com.fasterxml.jackson.core"       % "jackson-databind"        % "2.6.3" % "test",
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.6.2" % "test" exclude("org.yaml", "snakeyaml")
 )
 
 val testDependencies = Seq(
-  "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "1.0.108" % "test",
+  "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "[1.0.109,1.0.999]" % "test",
   "org.scalatest" %% "scalatest"   % "3.0.0-M10" % "test",
   "org.scalaz"    %% "scalaz-core" % "7.1.1" % "test"
 )
