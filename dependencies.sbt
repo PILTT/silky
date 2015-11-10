@@ -1,8 +1,5 @@
-resolvers ++= Seq(
-  "Sonatype OSS Releases"            at "http://oss.sonatype.org/content/repositories/releases/",
-  "Sonatype OSS Snapshots"           at "http://oss.sonatype.org/content/repositories/snapshots/",
-  "Sonatype OSS Public Repositories" at "https://oss.sonatype.org/content/groups/public/"
-)
+resolvers     += Resolver.sonatypeRepo("releases")
+updateOptions := updateOptions.value.withCachedResolution(cachedResoluton = true)
 
 val log4jVersion = "[2.0.1,2.9.99]"
 val slf4jVersion = "[1.7.0,1.9.99]"
