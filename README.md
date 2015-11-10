@@ -9,11 +9,11 @@ It is currently a superficial port of [Tracey](http://code.google.com/p/tracey/)
 
 ## SBT usage
 
-```
-libraryDependencies += "com.github.piltt" %% "silky" % "1.0.42"
+```scala
+libraryDependencies += "com.github.piltt" %% "silky" % <latest-version>
 ```
 
-[<img src="https://img.shields.io/maven-central/v/com.github.piltt/silky_2.10*.svg?label=latest%20release%20for%202.10"/>](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.piltt%20a%3Asilky_2.10) [<img src="https://img.shields.io/maven-central/v/com.github.piltt/silky_2.11*.svg?label=latest%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.piltt%20a%3Asilky_2.11)
+[<img src="https://img.shields.io/maven-central/v/com.github.piltt/silky_2.10*.svg?label=latest%20version%20for%202.10"/>](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.piltt%20a%3Asilky_2.10) [<img src="https://img.shields.io/maven-central/v/com.github.piltt/silky_2.11*.svg?label=latest%20version%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.github.piltt%20a%3Asilky_2.11)
 
 ## Contributing
 
