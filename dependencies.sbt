@@ -20,10 +20,14 @@ val log4j = Seq(
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.6.2" % "test" exclude("org.yaml", "snakeyaml")
 )
 
-val testDependencies = Seq(
+val productionDependencies = slf4j ++ Seq(
+  "com.chuusai" %% "shapeless" % "[2.2.5,2.2.99]" % "provided"
+)
+
+val testDependencies = log4j ++ Seq(
   "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "[1.0.109,1.0.999]" % "test",
-  "org.scalatest" %% "scalatest"   % "3.0.0-M10" % "test",
-  "org.scalaz"    %% "scalaz-core" % "7.1.1" % "test"
+  "org.scalatest" %% "scalatest"   % "3.0.0-M11" % "test",
+  "org.scalaz"    %% "scalaz-core" % "7.1.5"     % "test"
 )
 
 libraryDependencies <++= scalaVersion { scala_version ⇒ Seq(
@@ -31,15 +35,9 @@ libraryDependencies <++= scalaVersion { scala_version ⇒ Seq(
   "org.scala-lang" % "scala-reflect" % scala_version
 ) ++
   (CrossVersion.partialVersion(scala_version) match {
-    case Some((2, scalaMajor)) if scalaMajor == 10 ⇒ Seq(
-      "com.chuusai" % s"shapeless_2.10.5" % "2.1.0",
-      compilerPlugin("org.scalamacros" % s"paradise_$scala_version" % "2.0.1")
-    )
-    case Some((2, scalaMajor)) if scalaMajor >= 11 ⇒ Seq(
-      "com.chuusai" %% "shapeless" % "2.1.0",
-      "org.scala-lang.modules" %% "scala-xml" % "1.0.3" % "test"
-    )
+    case Some((2, scalaMajor)) if scalaMajor == 10 ⇒ Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full))
+    case Some((2, scalaMajor)) if scalaMajor >= 11 ⇒ Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.5" % "test")
     case _ ⇒ Seq.empty
   })
 }
-libraryDependencies ++= slf4j ++ log4j ++ testDependencies
+libraryDependencies ++= productionDependencies ++ testDependencies
