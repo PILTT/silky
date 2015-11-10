@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sbt clean coverage test
+sbt clean "+ update" coverage test
 
 # clean up to avoid unnecessary cache updates
 find $HOME/.sbt -name "*.lock" | xargs rm
