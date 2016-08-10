@@ -24,8 +24,8 @@ val productionDependencies = slf4j ++ Seq(
 
 val testDependencies = log4j ++ Seq(
   "com.github.rhyskeepence" %% "clairvoyance-scalatest" % "[1.0.109,1.0.999]" % "test",
-  "org.scalatest" %% "scalatest"   % "3.0.0-M11" % "test",
-  "org.scalaz"    %% "scalaz-core" % "7.1.5"     % "test"
+  "org.scalatest" %% "scalatest"   % "3.0.0" % "test",
+  "org.scalaz"    %% "scalaz-core" % "7.1.5" % "test"
 )
 
 libraryDependencies <++= scalaVersion { scala_version ⇒ Seq(
