@@ -231,6 +231,6 @@ object TreeStringSpec {
   })
 
   implicit def showNonEmptyList[T](implicit st: Option[ShowTree[List[T]]]): Option[ShowTree[NonEmptyList[T]]] = Some(new ShowTree[NonEmptyList[T]] {
-    def treeStringOf(value: NonEmptyList[T]) = s"NonEmptyList${st.get.treeStringOf(value.list).replaceFirst("Seq", "")}"
+    def treeStringOf(value: NonEmptyList[T]) = s"NonEmptyList${st.get.treeStringOf(value.list.toList).replaceFirst("Seq", "")}"
   })
 }
