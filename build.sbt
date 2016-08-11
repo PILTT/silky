@@ -9,5 +9,3 @@ crossScalaVersions := Seq("2.10.6", "2.11.8")
 
 javacOptions  ++= Seq("-Xms512m", "-Xmx512m", "-Xss4m")
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions")
-
-graphSettings
