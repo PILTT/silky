@@ -1,0 +1,9 @@
+Configuration:
+  Appenders:
+    Console: { name: STDOUT, target: SYSTEM_OUT,
+      PatternLayout: { Pattern: "%date{HH:mm:ss.SSS} %-5level [%thread] [%file:%line] %msg%n" } }
+
+  Loggers:
+    Root: { level: info, AppenderRef: [ ref: STDOUT ] }
+    Logger:
+      - { level: info,  name: silky.audit }
