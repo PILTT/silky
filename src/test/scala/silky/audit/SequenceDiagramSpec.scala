@@ -6,13 +6,14 @@ import clairvoyance.ProducesCapturedInputsAndOutputs
 import clairvoyance.plugins.SequenceDiagram
 import clairvoyance.scalatest.ClairvoyantContext
 import clairvoyance.scalatest.tags.skipInteractions
-import org.scalatest.{MustMatchers, Spec}
+import org.scalatest.MustMatchers
+import org.scalatest.refspec.RefSpec
 import silky.audit.Formatter._
 
 import scala.io.Source
 import scala.xml.parsing.ConstructingParser
 
-class SequenceDiagramSpec extends Spec with MustMatchers with ClairvoyantContext with SequenceDiagram {
+class SequenceDiagramSpec extends RefSpec with MustMatchers with ClairvoyantContext with SequenceDiagram {
 
   override def capturedInputsAndOutputs: Seq[ProducesCapturedInputsAndOutputs] = Seq(this)
 

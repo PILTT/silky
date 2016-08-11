@@ -1,17 +1,19 @@
 package silky.audit
 
 import java.util.{Date, TimeZone}
-import org.scalatest._
+import org.scalatest.{MustMatchers, WordSpec}
 import silky.MessageFlowId
 import silky.audit.Formatter.withoutMargin
 
-class FormatterSpec extends Spec with MustMatchers {
+class FormatterSpec extends WordSpec with MustMatchers {
   private val messageFlowId = MessageFlowId("456")
   private val underTest = new Formatter
+
   underTest.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
 
-  object `MessageFormatter must` {
-    def `be able to format an audit message, given a message flow identifier` {
+  "Formatter can format an audit message" when {
+
+    "given a message flow identifier" in {
       val message = AuditMessage(from = "Foo", to = "Bar", timestamp = new Date(0L), id = "4babe38095", payload =
           <foo><bar>1</bar></foo>)
 
@@ -27,7 +29,7 @@ class FormatterSpec extends Spec with MustMatchers {
       |""")
     }
 
-    def `be able to format an audit message with custom headers` {
+    "the message has custom headers" in {
       val message = AuditMessage(from = "Foo", to = "Bar", timestamp = new Date(0L), id = "4babe38095", payload = "Hello World!")
         .withHeader("Conversation", "d16dfac6-0896-4e38-aae2-13147fdee4be")
         .withHeader("Duration", "33 milliseconds")

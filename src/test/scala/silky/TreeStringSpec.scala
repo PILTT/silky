@@ -1,28 +1,33 @@
 package silky
 
-import org.scalatest.{MustMatchers, Spec}
+import org.scalatest.{MustMatchers, WordSpec}
 
 import scalaz.NonEmptyList
 
-class TreeStringSpec extends Spec with MustMatchers {
+class TreeStringSpec extends WordSpec with MustMatchers {
   import TreeStringSpec._
 
-  object `The implicitly exposed TreeString.asTreeString can` {
+  def is = afterWord("is")
 
-    def `render a case object`: Unit =
+  "The implicitly exposed TreeString.asTreeString can render an object" that is {
+
+    "a case object" in {
       Node0.asTreeString mustBe "Node0"
+    }
 
-    def `render a case class with 1-arity`: Unit =
+    "a case class with 1-arity" in {
       Node1("Bar").asTreeString mustBe "Node1(suffix = \"Bar\")"
+    }
 
-    def `render a case class with 2-arity`: Unit =
+    "a case class with 2-arity" in {
       Node2("Bar", 3).asTreeString mustBe
         """Node2(
           !- suffix = "Bar"
           !- position = 3
           !)""".stripMargin('!')
+    }
 
-    def `render a case class with 3-arity`: Unit =
+    "a case class with 3-arity" in {
       Node3("Bar", 3, List("stuff", "that", "works")).asTreeString mustBe
         """Node3(
           !- suffix = "Bar"
@@ -33,8 +38,9 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - "works"
           !| )
           !)""".stripMargin('!')
+    }
 
-    def `render a case class with 4-arity`: Unit =
+    "a case class with 4-arity" in {
       Node4("Baz", 5, Node3("Bar", 3, List("stuff", "that", "works"))).asTreeString mustBe
         """Node4(
           !- suffix = "Baz"
@@ -49,8 +55,9 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| | )
           !| )
           !)""".stripMargin('!')
+    }
 
-    def `render a case class with 5-arity`: Unit =
+    "a case class with 5-arity" in {
       Node5(
         suffix = Some("Zap"),
         top    = Node1("Bap"),
@@ -79,26 +86,30 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| )
           !- bottom = Node0
           !)""".stripMargin('!')
+    }
 
-    def `render a case class with a private parameter`: Unit =
+    "a case class with a private parameter" in {
       Node6("Bar").asTreeString mustBe "Node6()"
+    }
 
-    def `render a class that does not override toString`: Unit =
+    "a class that does not override toString" in {
       new Stuff(Node1("it"), Node1("well")).asTreeString mustBe
         """Stuff(
           !- top = Node1(suffix = "it")
           !- bottom = Node1(suffix = "well")
           !)""".stripMargin('!')
+    }
 
-    def `render a class that overrides toString`: Unit =
+    "a class that overrides toString" in {
       NonEmptyList(Node1("a"), Node1("b"), Node1("c")).asTreeString mustBe
         """NonEmptyList(
           !- Node1(suffix = "a")
           !- Node1(suffix = "b")
           !- Node1(suffix = "c")
           !)""".stripMargin('!')
+    }
 
-    def `render a case class containing objects for which ShowTree instances exist`: Unit =
+    "a case class containing objects for which ShowTree instances exist" in {
       Node7(new Stuff(Node1("it"), Node1("well")), NonEmptyList(Node1("a"), Node1("b"), Node1("c"))).asTreeString mustBe
         """Node7(
           !- contents = Stuff(
@@ -111,8 +122,9 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - Node1(suffix = "c")
           !| )
           !)""".stripMargin('!')
+    }
 
-    def `render a class containing objects for which ShowTree instances exist`: Unit =
+    "a class containing objects for which ShowTree instances exist" in {
       new Stuff2(Node7(new Stuff(Node1("it"), Node1("well")), NonEmptyList(Node1("a"), Node1("b"), Node1("c")))).asTreeString mustBe
         """Stuff2(node = Node7(
           !- contents = Stuff(
@@ -125,11 +137,13 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - Node1(suffix = "c")
           !| )
           !))""".stripMargin('!')
+    }
 
-    def `render a class with a missing optional parameter`: Unit =
+    "a class with a missing optional parameter" in {
       new Stuff3(None).asTreeString mustBe "Stuff3(node = None)"
+    }
 
-    def `render a class containing optional objects for which ShowTree instances exist`: Unit =
+    "a class containing optional objects for which ShowTree instances exist" in {
       new Stuff3(
         Some(Node8(
           head = new OptionalStuff(Some(Node1("top")), None),
@@ -146,8 +160,9 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| ))
           !)))""".
           stripMargin('!')
+    }
 
-    def `render a case class containing different types of collections`: Unit =
+    "a case class containing different types of collections" in {
       Node9(
         seq   = Seq(Node1("a1"), Node1("a2")),
         set   = Set(Node1("b1"), Node1("b2")),
@@ -177,6 +192,7 @@ class TreeStringSpec extends Spec with MustMatchers {
           !| - Node1(suffix = "e2")
           !| )
           !)""".stripMargin('!')
+    }
   }
 }
 

@@ -2,17 +2,21 @@ package silky.audit
 
 import java.util.{Date, TimeZone}
 
-import org.scalatest.{MustMatchers, Spec}
+import org.scalatest.{MustMatchers, WordSpec}
 import silky.audit.Formatter._
 
 import scala.io.Source
 
-class ParserSpec extends Spec with MustMatchers {
+class ParserSpec extends WordSpec with MustMatchers {
   private val underTest = new Parser
   underTest.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
 
-  object `AuditMessageParser must` {
-    def `be able to parse an audit message with an empty payload` {
+  def has = afterWord("has")
+  def dontHave = afterWord("do not have")
+
+  "Parser can parse an audit message" that has {
+
+    "an empty payload" in {
       underTest.parse(fromString(
         """
           |1970-01-01 00:00:00,000 Begin: 456
@@ -27,7 +31,7 @@ class ParserSpec extends Spec with MustMatchers {
       )
     }
 
-    def `be able to parse an audit message with a non-empty payload` {
+    "a non-empty payload" in {
       underTest.parse(fromString(
         """
           |1970-01-01 00:00:00,000 Begin: 456
@@ -43,7 +47,7 @@ class ParserSpec extends Spec with MustMatchers {
       )
     }
 
-    def `be able to parse an audit message with custom headers` {
+    "custom headers" in {
       underTest.parse(fromString(
         """
           |1970-01-01 00:00:00,000 Begin: 456
@@ -63,7 +67,7 @@ class ParserSpec extends Spec with MustMatchers {
       )
     }
 
-    def `be able to parse multiple audit messages` {
+    "multiple messages" in {
       underTest.parse(fromString(
         """
           |some garbage
@@ -102,8 +106,11 @@ class ParserSpec extends Spec with MustMatchers {
         AuditMessage(from = "Bar", to = "Foo", timestamp = new Date(5000L), id = "4babe38097", payload = "<bar>2</bar>")
       )
     }
+  }
 
-    def `skip a message without identifier` {
+  "Parser skips messages" that dontHave {
+
+    "'Message-Id'" in {
       underTest.parse(fromString(
         """
           |1970-01-01 00:00:00,000 Begin: 456
@@ -127,7 +134,7 @@ class ParserSpec extends Spec with MustMatchers {
       )
     }
 
-    def `skip a message without from` {
+    "'From'" in {
       underTest.parse(fromString(
         """
           |1970-01-01 00:00:00,000 Begin: 456
@@ -150,7 +157,7 @@ class ParserSpec extends Spec with MustMatchers {
       )
     }
 
-    def `skip a message without to` {
+    "'To'" in {
       underTest.parse(fromString(
         """
           |1970-01-01 00:00:00,000 Begin: 456
@@ -174,7 +181,7 @@ class ParserSpec extends Spec with MustMatchers {
       )
     }
 
-    def `skip a message without a closing marker` {
+    "the closing marker 'End'" in {
       underTest.parse(fromString(
         """
           |1970-01-01 00:00:00,000 Begin: 456
