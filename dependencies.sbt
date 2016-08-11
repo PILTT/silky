@@ -19,7 +19,7 @@ val log4j = Seq(
 )
 
 val productionDependencies = slf4j ++ Seq(
-  "com.chuusai" %% "shapeless" % "[2.2.5,2.2.99]" % "provided"
+  "com.chuusai" %% "shapeless" % "[2.2.5,2.3.99]" % "provided"
 )
 
 val testDependencies = log4j ++ Seq(
