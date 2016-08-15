@@ -1,4 +1,4 @@
 #!/bin/sh
 
-pip install --user codecov && codecov
-sbt coverageReport coveralls clean compile "+ publishSigned" sonatypeReleaseAll
+bash <(curl -s https://codecov.io/bash)
+sbt coveralls clean compile "+ publishSigned" sonatypeReleaseAll
